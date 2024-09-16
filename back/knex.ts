@@ -1,10 +1,10 @@
 declare module 'knex/types/tables' {
-  interface User {
+  export interface User {
     id: number;
     name: string;
   }
 
-  interface Photo {
+  export interface Photo {
     id: number;
     user_id: number;
     data: string;

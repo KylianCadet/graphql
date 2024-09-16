@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "start": "ts-node main.ts",
+    "database-init": "rm -f db.sqlite && touch db.sqlite && ts-node database-init.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

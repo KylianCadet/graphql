@@ -1,24 +1,12 @@
 import './knex'
 import express from "express";
 import { createHandler } from "graphql-http/lib/use/express"
-import { buildSchema, GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLScalarType, GraphQLSchema, GraphQLString } from "graphql"
+import { GraphQLInt, GraphQLNonNull, GraphQLObjectType, GraphQLSchema, GraphQLString } from "graphql"
 import { ruruHTML } from 'ruru/server'
-import { knex } from 'knex'
-import { DB_NAME } from './const';
+import { db } from './database';
+import { UserObject } from './user.type';
 
-const db = knex<string>({
-  client: 'sqlite3',
-  connection: {
-    filename: DB_NAME,
-  },
-  useNullAsDefault: true
-});
-
-const UserGraphQLType = new GraphQLScalarType({
-  name: 'user'
-})
-
-var schema = new GraphQLSchema({
+const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'RootQueryType',
     fields: {
@@ -48,7 +36,7 @@ var schema = new GraphQLSchema({
             type: new GraphQLNonNull(GraphQLInt)
           }
         },
-        type: UserGraphQLType,
+        type: UserObject,
         async resolve(_, { id }: { id: number }) {
           const users = await db.table('user').select('*').where('id', id)
           return users?.at(0);

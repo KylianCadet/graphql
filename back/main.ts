@@ -44,6 +44,23 @@ const schema = new GraphQLSchema({
       }
     },
   }),
+  mutation: new GraphQLObjectType({
+    name: 'RootMutationType',
+    fields: {
+      createUser: {
+        type: UserObject,
+        args: {
+          name: {
+            type: new GraphQLNonNull(GraphQLString)
+          }
+        },
+        async resolve(_, { name }: { name: string }) {
+          const [user] = await db.table('user').insert({ name }).returning('*')
+          return user;
+        },
+      },
+    },
+  })
 });
 
 var app = express()
